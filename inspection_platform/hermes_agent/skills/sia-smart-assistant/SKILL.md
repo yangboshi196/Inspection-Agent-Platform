@@ -6,7 +6,7 @@ description: >-
   triage. Triggers: 智能巡检助手, 智能助手, 触发任务, 巡检编排, 上传文档, 知识库,
   创建巡检业务, 巡检事件.
 version: 1.1.0
-author: 南京物盟信息技术有限公司
+author: Shi Yangbo
 license: MIT
 platforms: [linux]
 metadata:
