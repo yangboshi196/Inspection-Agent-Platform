@@ -1,0 +1,150 @@
+﻿[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "inspection-agent"
+version = "0.1.0"
+description = "智能巡检 Agent 框架（LLM 封装、记忆、提示词、RAG、工具调用）"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Shi Yangbo" }]
+dependencies = [
+  "httpx>=0.27.0",
+  "websockets>=12.0",
+  "chromadb>=0.5.0",
+  "pypdf>=4.3.0",
+  "python-docx>=1.1.2",
+  "fastapi>=0.115.0",
+  "uvicorn[standard]>=0.30.0",
+  "pydantic>=2.0.0",
+  "python-multipart>=0.0.9",
+  "openpyxl>=3.1.0",
+  "python-pptx>=1.0.0",
+  "openai>=1.0.0",
+  "prompt_toolkit>=3.0.0",
+  "rich>=13.0.0",
+  "pyyaml>=6.0.0",
+  "fire>=0.7.0",
+  "croniter>=6.0.0",
+  "psutil>=7.0.0",
+  "PyJWT[crypto]>=2.8.0",
+  "jinja2>=3.1.0",
+  "ruamel.yaml>=0.18.0",
+  "python-dotenv>=1.0.0",
+  "pydantic-settings>=2.0.0",
+  "sqlalchemy>=2.0.0",
+  "pymysql>=1.1.0",
+  "pymilvus>=2.4.0",
+  "sentence-transformers>=3.0.0",
+  "tenacity>=8.0.0",
+  "ptyprocess>=0.7.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0.0",
+  "ruff>=0.6.0",
+]
+rtsp = [
+  "av>=12.0.0",
+  "opencv-python-headless>=4.8.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["agent_base*", "inspection_platform*"]
+
+[tool.setuptools.package-data]
+"agent_base.model_manager" = ["models.json"]
+"agent_base.rag" = ["config.json"]
+"agent_base.prompts" = [
+  "agent/*.txt",
+  "rag/*.txt",
+  "rag/*.json",
+  "context/*.txt",
+  "context/*.json",
+]
+"inspection_platform" = ["static/**/*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sia-agent"
+version = "0.1.0"
+description = "物盟 Agent 框架（LLM 封装、记忆、提示词、RAG、工具调用）"
+requires-python = ">=3.10"
+license = { text = "Proprietary" }
+authors = [{ name = "sia" }]
+dependencies = [
+  "httpx>=0.27.0",
+  "websockets>=12.0",
+  "chromadb>=0.5.0",
+  "pypdf>=4.3.0",
+  "python-docx>=1.1.2",
+  "fastapi>=0.115.0",
+  "uvicorn[standard]>=0.30.0",
+  "pydantic>=2.0.0",
+  "python-multipart>=0.0.9",
+  "openpyxl>=3.1.0",
+  "python-pptx>=1.0.0",
+  "openai>=1.0.0",
+  "prompt_toolkit>=3.0.0",
+  "rich>=13.0.0",
+  "pyyaml>=6.0.0",
+  "fire>=0.7.0",
+  "croniter>=6.0.0",
+  "psutil>=7.0.0",
+  "PyJWT[crypto]>=2.8.0",
+  "jinja2>=3.1.0",
+  "ruamel.yaml>=0.18.0",
+  "python-dotenv>=1.0.0",
+  "pydantic-settings>=2.0.0",
+  "sqlalchemy>=2.0.0",
+  "pymysql>=1.1.0",
+  "pymilvus>=2.4.0",
+  "sentence-transformers>=3.0.0",
+  "tenacity>=8.0.0",
+  "ptyprocess>=0.7.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0.0",
+  "ruff>=0.6.0",
+]
+rtsp = [
+  "av>=12.0.0",
+  "opencv-python-headless>=4.8.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["agent_base*", "inspection_platform*"]
+
+[tool.setuptools.package-data]
+"agent_base.model_manager" = ["models.json"]
+"agent_base.rag" = ["config.json"]
+"agent_base.prompts" = [
+  "agent/*.txt",
+  "rag/*.txt",
+  "rag/*.json",
+  "context/*.txt",
+  "context/*.json",
+]
+"inspection_platform" = ["static/**/*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]

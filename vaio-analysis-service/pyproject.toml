@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vaio-analysis-service"
+version = "0.1.0"
+description = "Python thin layer + MCP for vaio-analysis-core"
+requires-python = ">=3.10"
+dependencies = [
+  "fastapi>=0.110",
+  "uvicorn[standard]>=0.27",
+  "httpx>=0.27",
+  "mcp>=1.0",
+  "pydantic>=2.0",
+]
+
+[project.scripts]
+vaio-mcp = "vaio_analysis.mcp_server:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["vaio_analysis*"]

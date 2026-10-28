@@ -1,0 +1,152 @@
+{
+  "templates": [
+    {
+      "template_id": "tpl-pm-weekly",
+      "name": "物业运营周报模版",
+      "filename": "pm-weekly-template.md",
+      "content": "# 规范\n## 对照条款清单\n\n# 巡检业务\n## 关联巡检业务\n\n# 区域\n## 覆盖区域范围\n\n# 巡检结果\n## 执行与告警汇总\n## 服务品质结论",
+      "uploaded_at": "2026-05-01 10:00",
+      "size_label": "2.1 KB",
+      "created_at": "2026-05-01 10:00",
+      "updated_at": "2026-05-01 10:00"
+    }
+  ],
+  "plans": [
+    {
+      "plan_id": "plan-daily",
+      "name": "物业服务日报",
+      "enabled": true,
+      "frequency": "daily",
+      "work_ids": ["iw-1", "iw-2", "iw-5"],
+      "content_prompt": "汇总报告周期内各巡检业务的规范对照、执行情况与巡检结果，按规范、巡检业务、区域、巡检结果四段输出，语言简洁，适合物业项目晨会汇报。",
+      "template_id": null,
+      "weekday": null,
+      "month_day": null,
+      "generate_time": "08:00",
+      "created_at": "2026-05-10 09:00",
+      "updated_at": "2026-05-18 14:00"
+    },
+    {
+      "plan_id": "plan-weekly",
+      "name": "园区运营周报",
+      "enabled": true,
+      "frequency": "weekly",
+      "work_ids": ["iw-1", "iw-2", "iw-3", "iw-5"],
+      "content_prompt": "汇总本周各巡检业务对照规范、区域覆盖与执行结果，突出需物业经理关注的异常项，按规范、巡检业务、区域、巡检结果输出。",
+      "template_id": "tpl-pm-weekly",
+      "weekday": 1,
+      "month_day": null,
+      "generate_time": "16:30",
+      "created_at": "2026-05-01 10:00",
+      "updated_at": "2026-05-18 16:30"
+    },
+    {
+      "plan_id": "plan-monthly",
+      "name": "月度服务品质报告",
+      "enabled": false,
+      "frequency": "monthly",
+      "work_ids": ["iw-1", "iw-2", "iw-3", "iw-4", "iw-5", "iw-6"],
+      "content_prompt": "生成月度服务品质汇总，包含各巡检业务合规率变化、重大事件回顾、整改闭环与下月工作重点，语言正式适合业主方归档。",
+      "template_id": null,
+      "weekday": null,
+      "month_day": 1,
+      "generate_time": "09:00",
+      "created_at": "2026-05-01 10:00",
+      "updated_at": "2026-05-15 11:00"
+    }
+  ],
+  "reports": [
+    {
+      "report_id": "rep-w20",
+      "plan_id": "plan-weekly",
+      "plan_name": "园区运营周报",
+      "title": "园区运营周报-2026-05-19",
+      "period": "2026-05-12 — 2026-05-18",
+      "frequency": "weekly",
+      "work_ids": ["iw-1", "iw-2", "iw-3", "iw-5"],
+      "status": "published",
+      "source": "scheduled",
+      "content_prompt": "汇总本周各巡检业务对照规范、区域覆盖与执行结果，突出需物业经理关注的异常项。",
+      "template_id": "tpl-pm-weekly",
+      "template_name": "物业运营周报模版",
+      "summary": "周报汇总：对照 4 条规范，4 条在线巡检业务覆盖 A座公区、地库、商业裙楼与园区外围；共执行 52 次，综合合规率 91.6%，待跟进告警 2 起。",
+      "sections": [
+        {
+          "id": "sec-spec",
+          "title": "规范",
+          "body": "共对照 4 条规范：公区环境、制服工牌、消防通道、地库CO与噪声管控。",
+          "detail": "· A座公区日常巡检：公区环境、制服工牌\n· 地下停车场秩序：消防通道、CO浓度\n· B座商业运营：装修噪声\n· 园区外围安防：制服工牌、噪声"
+        },
+        {
+          "id": "sec-work",
+          "title": "巡检业务",
+          "body": "4 条在线巡检业务：A座公区、地库秩序、商业运营、外围安防。",
+          "detail": "· A座公区日常（每2小时）· 2 算法 · 3 设备\n· 地下停车场（08/14/20）· 2 算法 · 4 设备\n· B座商业（7×24）· 2 算法 · 3 设备\n· 园区外围（06/12/18）· 2 算法 · 3 设备"
+        },
+        {
+          "id": "sec-region",
+          "title": "区域",
+          "body": "覆盖 4 个主区域：A座大堂公区、地下停车场、B座商业、园区外围。",
+          "detail": "· A座大堂与公区 ← A座公区日常\n· 地下停车场 ← 地库秩序\n· B座商业裙楼 ← 商业运营\n· 园区外围 ← 外围安防"
+        },
+        {
+          "id": "sec-result",
+          "title": "巡检结果",
+          "body": "本周共执行巡检 52 次，综合合规率 91.6%；视频告警 4 起、传感异常 2 起，已关闭 3 起。",
+          "detail": "· A座公区：合规率 93%，工牌告警 1 起待跟进\n· 地库秩序：合规率 89%，消防通道堆物处理中\n· 商业运营：合规率 92%，垃圾满溢已闭环\n· 外围安防：合规率 91%，噪声投诉已协调"
+        }
+      ],
+      "full_text": "园区运营周报-2026-05-19\n报告周期：2026-05-12 — 2026-05-18\n\n—— 摘要 ——\n对照 4 条规范，4 条在线巡检业务；执行 52 次，合规率 91.6%，待跟进 2 起。",
+      "created_at": "2026-05-18 16:30",
+      "updated_at": "2026-05-18 16:30"
+    },
+    {
+      "report_id": "rep-m05",
+      "plan_id": "plan-monthly",
+      "plan_name": "月度服务品质报告",
+      "title": "月度服务品质报告-2026-05",
+      "period": "2026-05-01 — 2026-05-31",
+      "frequency": "monthly",
+      "work_ids": ["iw-1", "iw-2", "iw-3", "iw-4", "iw-5", "iw-6"],
+      "status": "draft",
+      "source": "scheduled",
+      "content_prompt": "生成月度服务品质汇总。",
+      "template_id": null,
+      "template_name": null,
+      "summary": "月度汇总编制中，已归集公区、地库、商业、机房与外围各条线数据。",
+      "sections": [
+        { "id": "sec-spec-m", "title": "规范", "body": "共对照 6 条物业服务规范。", "detail": "涵盖环境、人员形象、消防、地库、噪声、机房烟雾。" },
+        { "id": "sec-work-m", "title": "巡检业务", "body": "6 条巡检业务已配置。", "detail": "含 4 条在线、2 条离线/季检。" },
+        { "id": "sec-region-m", "title": "区域", "body": "覆盖园区 7 个区域节点。", "detail": "含层级子区域 A座大堂、设备夹层。" },
+        { "id": "sec-result-m", "title": "巡检结果", "body": "月内执行巡检约 240 次，综合合规率 91.2%。", "detail": "待完整统计后发布。" }
+      ],
+      "full_text": "月度服务品质报告-2026-05\n编制中。",
+      "created_at": "2026-05-19 09:00",
+      "updated_at": "2026-05-19 09:00"
+    },
+    {
+      "report_id": "rep-adhoc-1",
+      "plan_id": null,
+      "plan_name": null,
+      "title": "重大活动保障专项-2026-05-15",
+      "period": "2026-05-15 专项",
+      "frequency": "adhoc",
+      "work_ids": ["iw-4"],
+      "status": "published",
+      "source": "manual",
+      "content_prompt": "设备机房活动前专项排查。",
+      "template_id": null,
+      "template_name": null,
+      "summary": "配电间、水泵房专项排查完成，检测链路验证通过，满足活动保障要求。",
+      "sections": [
+        { "id": "sec-spec-a", "title": "规范", "body": "对照配电间烟雾零容忍规范。", "detail": "" },
+        { "id": "sec-work-a", "title": "巡检业务", "body": "设备机房专项巡检。", "detail": "" },
+        { "id": "sec-region-a", "title": "区域", "body": "A座设备夹层。", "detail": "" },
+        { "id": "sec-result-a", "title": "巡检结果", "body": "专项执行 2 次，无未闭环告警。", "detail": "" }
+      ],
+      "full_text": "重大活动保障专项-2026-05-15\n专项排查完成。",
+      "created_at": "2026-05-15 18:00",
+      "updated_at": "2026-05-15 18:00"
+    }
+  ]
+}

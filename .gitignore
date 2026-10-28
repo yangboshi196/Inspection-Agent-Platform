@@ -1,0 +1,106 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.ruff_cache/
+
+# Frontend dependencies and caches (huge file trees)
+webui/node_modules/
+webui/.vite/
+webui/dist/
+webui/node_modules/.vite/
+
+# Runtime scratch files
+.run/
+logs/
+*.log
+
+# Local secrets
+.local/
+.env
+.env.local
+
+# Runtime data and uploaded files
+data/
+milvus_db/
+.rag_index_*/
+.tools/
+agent_skills/
+demo/
+vaio-analysis-service/x86_64/
+vaio-analysis-service/*.egg-info/
+vaioserver/
+
+# Media / model caches
+scripts/jellyfin-ffmpeg_*.tar.xz
+
+# IDE
+.cursor/
+.vscode/
+
+# Symlinks / local binaries
+/core
+webui/core
+inspection_platform/hermes_agent/ui-tui/core
+*.bak
+*.bak-*
+/models/
+!inspection_platform/app/models/
+!inspection_platform/app/models/**
+
+# macOS / Windows
+.DS_Store
+Thumbs.db
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.ruff_cache/
+# Frontend dependencies and caches (huge file trees)
+webui/node_modules/
+webui/.vite/
+webui/dist/
+webui/node_modules/.vite/
+# Runtime scratch files
+.run/
+# Local secrets (SVN credentials, etc.)
+.local/
+.env
+# 本地运行数据：根目录下各 *.db + 原文目录 files/
+data/*.db
+data/equipment_simulate/
+data/inspection_event_evidence/
+data/logs/
+data/files/
+.tools/
+scripts/jellyfin-ffmpeg_*.tar.xz
+vaio-analysis-service/x86_64/cookie_open.txt
+data/knowledge_chroma/
+milvus_db/
+agent_skills/
+demo/
+va
+# 根目录及 webui 下的 core 符号链接/本地二进制
+/core
+webui/core
+*.bak
+*.bak-*
+/models/
+!vomont_platform/app/models/
+!vomont_platform/app/models/**
+# vaio-analysis-service runtime binaries and local artifacts
+vaio-analysis-service/x86_64/vaio-analysis-core
+vaio-analysis-service/x86_64/core
+vaio-analysis-service/x86_64/model/
+vaio-analysis-service/x86_64/*.mp4
+vaio-analysis-service/x86_64/log_*.log
+vaio-analysis-service/x86_64/lib*.a
+vaio-analysis-service/x86_64/lib*.so
+vaio-analysis-service/*.egg-info/
+
+vaioserver/

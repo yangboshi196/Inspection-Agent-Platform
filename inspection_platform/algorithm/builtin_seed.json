@@ -1,0 +1,169 @@
+[
+  {
+    "algorithm_id": "algo-1",
+    "name": "制服工牌识别",
+    "desc": "识别物业在岗人员制服、工牌佩戴情况，适用于门岗、大堂与公区通道。",
+    "link": "/api/algorithm/invoke/algo-1",
+    "schema": {
+      "meta": { "source": "物业智慧巡检内置", "category": "人员服务" },
+      "input": {
+        "type": "object",
+        "properties": {
+          "video_stream": { "type": "string", "description": "视频流地址或设备 id" },
+          "roi": { "type": "array", "description": "检测区域多边形" }
+        }
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "detected": { "type": "boolean" },
+          "confidence": { "type": "number" },
+          "events": { "type": "array", "items": { "type": "object" } }
+        }
+      }
+    },
+    "health": "ok"
+  },
+  {
+    "algorithm_id": "algo-2",
+    "name": "消防通道占用检测",
+    "desc": "检测消防通道、疏散楼梯间堆物、锁闭或车辆占用。",
+    "link": "/api/algorithm/invoke/algo-2",
+    "schema": {
+      "meta": { "source": "物业智慧巡检内置", "category": "消防安全" },
+      "input": { "type": "object", "properties": { "video_stream": { "type": "string" } } },
+      "output": { "type": "object", "properties": { "detected": { "type": "boolean" }, "confidence": { "type": "number" } } }
+    },
+    "health": "ok"
+  },
+  {
+    "algorithm_id": "algo-3",
+    "name": "重点区域入侵",
+    "desc": "配电间、水泵房、设备夹层等限制区域人员入侵检测。",
+    "link": "/api/algorithm/invoke/algo-3",
+    "schema": {
+      "meta": { "source": "物业智慧巡检内置", "category": "周界安防" },
+      "input": { "type": "object", "properties": { "video_stream": { "type": "string" } } },
+      "output": { "type": "object", "properties": { "detected": { "type": "boolean" }, "confidence": { "type": "number" } } }
+    },
+    "health": "ok"
+  },
+  {
+    "algorithm_id": "algo-4",
+    "name": "环境噪声分析",
+    "desc": "基于传感时序数据判断商业区、卸货区噪声是否超过物业管控阈值。",
+    "link": "/api/algorithm/invoke/algo-4",
+    "schema": {
+      "meta": { "source": "物业智慧巡检内置", "category": "环境与传感" },
+      "input": { "type": "object", "properties": { "sensor_series": { "type": "array" } } },
+      "output": { "type": "object", "properties": { "detected": { "type": "boolean" }, "value": { "type": "number" } } }
+    },
+    "health": "ok"
+  },
+  {
+    "algorithm_id": "algo-5",
+    "name": "车辆违停识别",
+    "desc": "地库通道、卸货月台消防禁停区车辆违停识别。",
+    "link": "/api/algorithm/invoke/algo-5",
+    "schema": {
+      "meta": { "source": "物业智慧巡检内置", "category": "停车管理" },
+      "input": { "type": "object", "properties": { "video_stream": { "type": "string" } } },
+      "output": { "type": "object", "properties": { "detected": { "type": "boolean" }, "confidence": { "type": "number" } } }
+    },
+    "health": "ok"
+  },
+  {
+    "algorithm_id": "algo-6",
+    "name": "垃圾满溢检测",
+    "desc": "商业中庭、公区垃圾桶满溢与杂物堆放检测。",
+    "link": "/api/algorithm/invoke/algo-6",
+    "schema": {
+      "meta": { "source": "物业智慧巡检内置", "category": "环境卫生" },
+      "input": { "type": "object", "properties": { "video_stream": { "type": "string" } } },
+      "output": { "type": "object", "properties": { "detected": { "type": "boolean" }, "confidence": { "type": "number" } } }
+    },
+    "health": "ok"
+  },
+  {
+    "algorithm_id": "algo-7",
+    "name": "机房异常温升",
+    "desc": "配电间、水泵房、屋面设备区温度异常上升趋势分析。",
+    "link": "/api/algorithm/invoke/algo-7",
+    "schema": {
+      "meta": { "source": "物业智慧巡检内置", "category": "设备设施" },
+      "input": { "type": "object", "properties": { "sensor_series": { "type": "array" } } },
+      "output": { "type": "object", "properties": { "detected": { "type": "boolean" }, "value": { "type": "number" } } }
+    },
+    "health": "degraded"
+  },
+  {
+    "algorithm_id": "algo-8",
+    "name": "占道经营检测",
+    "desc": "商业裙楼周边占道摆摊、物料外摆检测。",
+    "link": "/api/algorithm/invoke/algo-8",
+    "schema": {
+      "meta": { "source": "物业智慧巡检内置", "category": "秩序管理" },
+      "input": { "type": "object", "properties": { "video_stream": { "type": "string" } } },
+      "output": { "type": "object", "properties": { "detected": { "type": "boolean" }, "confidence": { "type": "number" } } }
+    },
+    "health": "ok"
+  },
+  {
+    "algorithm_id": "llm-phone-call",
+    "name": "大模型-打电话",
+    "desc": "基于 LlmEngine HTTP POST /api/detect 直接视觉大模型检测打电话行为，不经 VAIO 小模型链路。",
+    "link": "llm://detect/phone-call",
+    "schema": {
+      "meta": {
+        "source": "llm-engine",
+        "llm_detect": true,
+        "kind": "phone_call",
+        "category": "大模型直连"
+      },
+      "input": {
+        "type": "object",
+        "properties": {
+          "video_stream": { "type": "string", "description": "视频流或设备 id" },
+          "llm_model_id": { "type": "string", "description": "可选，LlmEngine 模型 id" }
+        }
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "has_violation": { "type": "boolean" },
+          "violations": { "type": "array" }
+        }
+      }
+    },
+    "health": "ok"
+  },
+  {
+    "algorithm_id": "llm-play-phone",
+    "name": "大模型-玩手机",
+    "desc": "基于 LlmEngine HTTP POST /api/detect 直接视觉大模型检测玩手机行为，不经 VAIO 小模型链路。",
+    "link": "llm://detect/play-phone",
+    "schema": {
+      "meta": {
+        "source": "llm-engine",
+        "llm_detect": true,
+        "kind": "play_phone",
+        "category": "大模型直连"
+      },
+      "input": {
+        "type": "object",
+        "properties": {
+          "video_stream": { "type": "string" },
+          "llm_model_id": { "type": "string", "description": "可选，LlmEngine 模型 id" }
+        }
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "has_violation": { "type": "boolean" },
+          "violations": { "type": "array" }
+        }
+      }
+    },
+    "health": "ok"
+  }
+]

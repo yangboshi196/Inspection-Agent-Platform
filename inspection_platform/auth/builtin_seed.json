@@ -1,0 +1,84 @@
+[
+  {
+    "user_id": "u1",
+    "account": "zhang.gong",
+    "name": "张工",
+    "status": "active",
+    "password": "demo1234",
+    "permissions": [
+      "p-dash",
+      "p-trigger-task",
+      "p-reports",
+      "p-events",
+      "p-inspection-view",
+      "p-inspection",
+      "p-device",
+      "p-knowledge",
+      "p-algo",
+      "p-perm",
+      "p-logs",
+      "p-docs",
+      "p-workflow"
+    ]
+  },
+  {
+    "user_id": "u2",
+    "account": "li.min",
+    "name": "李敏",
+    "status": "active",
+    "password": "demo1234",
+    "permissions": [
+      "p-dash",
+      "p-trigger-task",
+      "p-reports",
+      "p-events",
+      "p-inspection-view",
+      "p-inspection",
+      "p-device",
+      "p-knowledge",
+      "p-algo"
+    ]
+  },
+  {
+    "user_id": "u3",
+    "account": "wang.audit",
+    "name": "王审计",
+    "status": "active",
+    "password": "demo1234",
+    "permissions": ["p-dash", "p-trigger-task", "p-reports", "p-events", "p-inspection-view"]
+  },
+  {
+    "user_id": "u4",
+    "account": "zhao.site",
+    "name": "赵现场",
+    "status": "active",
+    "password": "demo1234",
+    "permissions": ["p-dash", "p-trigger-task", "p-events"]
+  },
+  {
+    "user_id": "u5",
+    "account": "chen.off",
+    "name": "陈停用",
+    "status": "disabled",
+    "password": "demo1234",
+    "permissions": ["p-dash", "p-trigger-task", "p-reports"]
+  },
+  {
+    "user_id": "u-demo",
+    "account": "demo",
+    "name": "演示账号",
+    "status": "active",
+    "password": "demo1234",
+    "permissions": [
+      "p-dash",
+      "p-trigger-task",
+      "p-reports",
+      "p-events",
+      "p-inspection-view",
+      "p-inspection",
+      "p-device",
+      "p-knowledge",
+      "p-algo"
+    ]
+  }
+]

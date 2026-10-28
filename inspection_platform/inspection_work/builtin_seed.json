@@ -1,0 +1,140 @@
+[
+  {
+    "work_id": "iw-1",
+    "region_id": "r1a",
+    "region_ids": ["r1a", "r1"],
+    "name": "A座公区日常巡检",
+    "desc": "大堂、电梯厅视频与公区环境传感联合巡检",
+    "rule_set": [
+      { "rule_id": "rule-1", "name": "公区环境温湿度标准", "level": "common" },
+      { "rule_id": "rule-2", "name": "在岗人员制服工牌规范", "level": "common" }
+    ],
+    "algorithm_set": [
+      { "algorithm_id": "algo-1", "name": "制服工牌识别", "health": "healthy" },
+      { "algorithm_id": "algo-2", "name": "消防通道占用检测", "health": "healthy" }
+    ],
+    "equipment_set": [
+      { "equipment_id": "cam-001", "name": "A座大堂主入口", "role": "camera" },
+      { "equipment_id": "cam-002", "name": "A座电梯厅", "role": "camera" },
+      { "equipment_id": "sen-001", "name": "A座大堂温湿度", "role": "sensor" }
+    ],
+    "source": "manual",
+    "schedule_mode": "periodic",
+    "schedule_interval": "每2小时",
+    "work_status": "online"
+  },
+  {
+    "work_id": "iw-2",
+    "region_id": "r3",
+    "region_ids": ["r3"],
+    "name": "地下停车场秩序巡检",
+    "desc": "地库车行通道、消防通道与CO环境",
+    "rule_set": [
+      { "rule_id": "rule-3", "name": "消防通道严禁占用", "level": "strict" },
+      { "rule_id": "rule-4", "name": "地下车库CO浓度上限", "level": "common" }
+    ],
+    "algorithm_set": [
+      { "algorithm_id": "algo-2", "name": "消防通道占用检测", "health": "healthy" },
+      { "algorithm_id": "algo-5", "name": "车辆违停识别", "health": "healthy" }
+    ],
+    "equipment_set": [
+      { "equipment_id": "cam-006", "name": "地库B1入口", "role": "camera" },
+      { "equipment_id": "cam-007", "name": "地库B2消防通道", "role": "camera" },
+      { "equipment_id": "sen-003", "name": "地库CO浓度", "role": "sensor" },
+      { "equipment_id": "sen-004", "name": "地库照度", "role": "sensor" }
+    ],
+    "source": "manual",
+    "schedule_mode": "scheduled",
+    "schedule_times": "08:00,14:00,20:00",
+    "work_status": "online"
+  },
+  {
+    "work_id": "iw-3",
+    "region_id": "r2",
+    "region_ids": ["r2"],
+    "name": "B座商业运营巡检",
+    "desc": "中庭客流、卸货平台与餐饮环境",
+    "rule_set": [
+      { "rule_id": "rule-5", "name": "商业区装修噪声限值", "level": "common" }
+    ],
+    "algorithm_set": [
+      { "algorithm_id": "algo-4", "name": "环境噪声分析", "health": "healthy" },
+      { "algorithm_id": "algo-6", "name": "垃圾满溢检测", "health": "healthy" }
+    ],
+    "equipment_set": [
+      { "equipment_id": "cam-004", "name": "B座一层中庭", "role": "camera" },
+      { "equipment_id": "cam-005", "name": "B座卸货平台", "role": "camera" },
+      { "equipment_id": "sen-005", "name": "B座餐厨油烟", "role": "sensor" }
+    ],
+    "source": "ai",
+    "schedule_mode": "continuous",
+    "work_status": "online"
+  },
+  {
+    "work_id": "iw-4",
+    "region_id": "r1b",
+    "region_ids": ["r1b"],
+    "name": "设备机房专项巡检",
+    "desc": "配电间、水泵房烟雾与设备运行",
+    "rule_set": [
+      { "rule_id": "rule-6", "name": "配电间烟雾零容忍", "level": "strict" }
+    ],
+    "algorithm_set": [
+      { "algorithm_id": "algo-3", "name": "重点区域入侵", "health": "healthy" },
+      { "algorithm_id": "algo-7", "name": "机房异常温升", "health": "degraded" }
+    ],
+    "equipment_set": [
+      { "equipment_id": "cam-003", "name": "A座配电间", "role": "camera" },
+      { "equipment_id": "sen-002", "name": "配电间烟雾", "role": "sensor" },
+      { "equipment_id": "sen-007", "name": "水泵房管网压力", "role": "sensor" }
+    ],
+    "source": "manual",
+    "schedule_mode": "manual",
+    "work_status": "offline"
+  },
+  {
+    "work_id": "iw-5",
+    "region_id": "r4",
+    "region_ids": ["r4"],
+    "name": "园区外围安防巡检",
+    "desc": "门岗、卸货区与园区边界",
+    "rule_set": [
+      { "rule_id": "rule-2", "name": "在岗人员制服工牌规范", "level": "common" },
+      { "rule_id": "rule-5", "name": "商业区装修噪声限值", "level": "common" }
+    ],
+    "algorithm_set": [
+      { "algorithm_id": "algo-1", "name": "制服工牌识别", "health": "healthy" },
+      { "algorithm_id": "algo-3", "name": "重点区域入侵", "health": "healthy" }
+    ],
+    "equipment_set": [
+      { "equipment_id": "cam-008", "name": "园区东门岗", "role": "camera" },
+      { "equipment_id": "cam-009", "name": "卸货区月台", "role": "camera" },
+      { "equipment_id": "sen-006", "name": "园区边界噪声", "role": "sensor" }
+    ],
+    "source": "manual",
+    "schedule_mode": "scheduled",
+    "schedule_times": "06:00,12:00,18:00",
+    "work_status": "online"
+  },
+  {
+    "work_id": "iw-6",
+    "region_id": "r1b",
+    "region_ids": ["r1b", "r1"],
+    "name": "屋面设备季检",
+    "desc": "屋面冷却塔与水箱液位专项（季节性）",
+    "rule_set": [
+      { "rule_id": "rule-1", "name": "公区环境温湿度标准", "level": "common" }
+    ],
+    "algorithm_set": [
+      { "algorithm_id": "algo-7", "name": "机房异常温升", "health": "healthy" }
+    ],
+    "equipment_set": [
+      { "equipment_id": "cam-010", "name": "A座屋面设备区", "role": "camera" },
+      { "equipment_id": "sen-008", "name": "屋面水箱液位", "role": "sensor" }
+    ],
+    "source": "manual",
+    "schedule_mode": "periodic",
+    "schedule_interval": "每周",
+    "work_status": "offline"
+  }
+]

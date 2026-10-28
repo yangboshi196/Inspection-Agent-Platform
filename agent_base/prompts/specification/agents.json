@@ -1,0 +1,79 @@
+﻿{
+  "agents": [
+    {
+      "id": "spec_rule_entity_recognizer",
+      "label": "规范实体识别助手",
+      "role": "从已向量化文档摘录中提取可入库的规范实体（规则记录）",
+      "system_prompt": "specification/rule_entity_recognition.txt",
+      "purpose": "spec_rule_extract",
+      "temperature": 0.2,
+      "max_output_tokens": 4096,
+      "skill": "sia-spec-rule-extractor",
+      "output": {
+        "type": "json_array",
+        "fields": ["name", "desc", "source", "requirements", "algorithm_guidance"]
+      }
+    },
+    {
+      "id": "spec_region_algorithm_matcher",
+      "label": "规范条目智能推荐助手",
+      "role": "为单条规范从平台区域/算法目录中语义匹配适用区域与推荐算法",
+      "system_prompt": "specification/match_regions_algorithms.txt",
+      "purpose": "spec_rule_recommend",
+      "temperature": 0.2,
+      "max_output_tokens": 2048,
+      "skill": "sia-spec-rule-recommender",
+      "output": {
+        "type": "json_object",
+        "fields": [
+          "region_ids",
+          "algorithm_ids",
+          "region_reasoning",
+          "algorithm_reasoning"
+        ]
+      }
+    },
+    {
+      "id": "spec_project_manager",
+      "label": "规范入库项目经理",
+      "role": "规划单批文档规范抽取的范围、风险与交付物（Hermes 流水线步骤1）",
+      "system_prompt": "specification/pipeline_project_manager.txt",
+      "purpose": "spec_pipeline_project_manager",
+      "temperature": 0.3,
+      "max_output_tokens": 1024,
+      "skill": "sia-spec-step-project-manager",
+      "output": {
+        "type": "json_object",
+        "fields": ["scope", "risks", "deliverables", "notes"]
+      }
+    },
+    {
+      "id": "spec_product_manager",
+      "label": "规范抽取产品经理",
+      "role": "制定 topic、max_rules 与验收标准（Hermes 流水线步骤2）",
+      "system_prompt": "specification/pipeline_product_manager.txt",
+      "purpose": "spec_pipeline_product_manager",
+      "temperature": 0.3,
+      "max_output_tokens": 1024,
+      "skill": "sia-spec-step-product-manager",
+      "output": {
+        "type": "json_object",
+        "fields": ["topic", "max_rules", "extract_focus", "acceptance_criteria"]
+      }
+    },
+    {
+      "id": "spec_compliance_reviewer",
+      "label": "规范合规审核员",
+      "role": "审核草稿规范及区域/算法推荐（Hermes 流水线步骤5）",
+      "system_prompt": "specification/pipeline_compliance_reviewer.txt",
+      "purpose": "spec_pipeline_review",
+      "temperature": 0.2,
+      "max_output_tokens": 2048,
+      "skill": "sia-spec-step-review",
+      "output": {
+        "type": "json_object",
+        "fields": ["approved_rule_ids", "rejected_rule_ids", "issues", "summary"]
+      }
+    }
+  ]
+}

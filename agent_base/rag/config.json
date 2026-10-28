@@ -1,0 +1,30 @@
+{
+  "knowledge_bases": [
+    {
+      "id": "test",
+      "name": "test",
+      "doc_dir": "rag_docs/test",
+      "rebuild_policy": "manual",
+      "chunk": {
+        "chunk_size": 1000,
+        "chunk_overlap": 150
+      },
+      "embedding": {},
+      "retrieval": {
+        "top_k": 5,
+        "candidate_k": 15,
+        "min_score": 0.75,
+        "enable_rerank": false,
+        "need_citation": true
+      },
+      "index": {
+        "type": "vector",
+        "persist_dir": ".rag_index",
+        "meta_fields": [
+          "doc_name",
+          "kb_id"
+        ]
+      }
+    }
+  ]
+}

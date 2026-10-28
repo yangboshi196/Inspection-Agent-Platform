@@ -1,0 +1,9 @@
+{
+  "describe_empty": "[插图：模型返回为空]",
+  "describe_error_prefix": "[插图识别失败：",
+  "describe_error_suffix": "]",
+  "skip_over_limit": "\n[插图：已跳过（超出本文件识图张数上限）]\n",
+  "skip_too_large": "\n[插图：体积过大已跳过]\n",
+  "wrap_desc_prefix": "\n[插图]\n",
+  "wrap_desc_suffix": "\n"
+}

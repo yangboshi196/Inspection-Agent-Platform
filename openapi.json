@@ -1,0 +1,6386 @@
+﻿{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "inspection_platform",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/api/health": {
+      "get": {
+        "tags": [
+          "api"
+        ],
+        "summary": "健康检查",
+        "description": "返回服务存活状态，供负载均衡或监控探活。",
+        "operationId": "health_api_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object",
+                  "title": "Response Health Api Health Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/chat/stream": {
+      "post": {
+        "tags": [
+          "api"
+        ],
+        "summary": "主 Agent 流式对话",
+        "description": "Server-Sent Events：按行推送 JSON 事件（含模型回复、工具调用等）。请求体为 ChatBody。",
+        "operationId": "api_chat_stream_api_chat_stream_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/document/": {
+      "post": {
+        "tags": [
+          "document"
+        ],
+        "summary": "上传文档原文",
+        "operationId": "upload_document_api_document__post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_upload_document_api_document__post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Upload Document Api Document  Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "document"
+        ],
+        "summary": "快速浏览文档库",
+        "operationId": "list_document_api_document__get",
+        "parameters": [
+          {
+            "name": "doc_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "按 doc_type 精确筛选。",
+              "title": "Doc Type"
+            },
+            "description": "按 doc_type 精确筛选。"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "本页条数，空串等同默认 100。",
+              "title": "Limit"
+            },
+            "description": "本页条数，空串等同默认 100。"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "分页偏移，空串等同 0。",
+              "title": "Offset"
+            },
+            "description": "分页偏移，空串等同 0。"
+          },
+          {
+            "name": "full",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "是否返回完整行；空串等同 false。",
+              "title": "Full"
+            },
+            "description": "是否返回完整行；空串等同 false。"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  },
+                  "title": "Response List Document Api Document  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/document/{doc_id}/download": {
+      "get": {
+        "tags": [
+          "document"
+        ],
+        "summary": "下载文档原文",
+        "operationId": "download_document_api_document__doc_id__download_get",
+        "parameters": [
+          {
+            "name": "doc_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "description": "文档主键：SQLite document 表 id（与入库响应 id 一致，一般为 32 位 hex）。",
+              "title": "Doc Id"
+            },
+            "description": "文档主键：SQLite document 表 id（与入库响应 id 一致，一般为 32 位 hex）。"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/document/{doc_id}": {
+      "get": {
+        "tags": [
+          "document"
+        ],
+        "summary": "获取文档元数据",
+        "operationId": "get_document_api_document__doc_id__get",
+        "parameters": [
+          {
+            "name": "doc_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "description": "文档主键：SQLite document 表 id（与入库响应 id 一致，一般为 32 位 hex）。",
+              "title": "Doc Id"
+            },
+            "description": "文档主键：SQLite document 表 id（与入库响应 id 一致，一般为 32 位 hex）。"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Get Document Api Document  Doc Id  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "document"
+        ],
+        "summary": "更新文档元数据",
+        "operationId": "patch_document_api_document__doc_id__patch",
+        "parameters": [
+          {
+            "name": "doc_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "description": "文档主键：SQLite document 表 id（与入库响应 id 一致，一般为 32 位 hex）。",
+              "title": "Doc Id"
+            },
+            "description": "文档主键：SQLite document 表 id（与入库响应 id 一致，一般为 32 位 hex）。"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DocumentPatchBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Patch Document Api Document  Doc Id  Patch"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "document"
+        ],
+        "summary": "删除文档",
+        "operationId": "delete_document_api_document__doc_id__delete",
+        "parameters": [
+          {
+            "name": "doc_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "description": "文档主键：SQLite document 表 id（与入库响应 id 一致，一般为 32 位 hex）。",
+              "title": "Doc Id"
+            },
+            "description": "文档主键：SQLite document 表 id（与入库响应 id 一致，一般为 32 位 hex）。"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/region/": {
+      "get": {
+        "tags": [
+          "region"
+        ],
+        "summary": "列出全部区域",
+        "description": "返回 region 表全部记录，无分页。",
+        "operationId": "list_region_meta_api_region__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/RegionMetaOut"
+                  },
+                  "type": "array",
+                  "title": "Response List Region Meta Api Region  Get"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "region"
+        ],
+        "summary": "创建区域",
+        "description": "在 region 专用 SQLite 中插入一条区域元数据。",
+        "operationId": "create_region_meta_api_region__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegionCreatePayload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegionMetaOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/region/{id}": {
+      "get": {
+        "tags": [
+          "region"
+        ],
+        "summary": "获取单个区域",
+        "description": "按主键读取区域元数据。",
+        "operationId": "get_region_meta_api_region__id__get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256,
+              "description": "区域元数据主键 id；在 region 专用 SQLite 中唯一，与 document.region_id 仅业务上可对应。",
+              "title": "Id"
+            },
+            "description": "区域元数据主键 id；在 region 专用 SQLite 中唯一，与 document.region_id 仅业务上可对应。"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegionMetaOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "region"
+        ],
+        "summary": "更新区域",
+        "description": "部分更新 name/desc，至少传一个字段。",
+        "operationId": "patch_region_meta_api_region__id__patch",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256,
+              "description": "区域元数据主键 id；在 region 专用 SQLite 中唯一，与 document.region_id 仅业务上可对应。",
+              "title": "Id"
+            },
+            "description": "区域元数据主键 id；在 region 专用 SQLite 中唯一，与 document.region_id 仅业务上可对应。"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegionPatchPayload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegionMetaOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "region"
+        ],
+        "summary": "删除区域",
+        "description": "从 region SQLite 删除该 id；不级联删除 document 或规范数据。",
+        "operationId": "delete_region_meta_api_region__id__delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256,
+              "description": "区域元数据主键 id；在 region 专用 SQLite 中唯一，与 document.region_id 仅业务上可对应。",
+              "title": "Id"
+            },
+            "description": "区域元数据主键 id；在 region 专用 SQLite 中唯一，与 document.region_id 仅业务上可对应。"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/knowledge/ingest": {
+      "post": {
+        "tags": [
+          "knowledge"
+        ],
+        "summary": "从文档库选择并向量化",
+        "description": "不接收文件上传。须先在 /api/document 将文件写入 SQLite 与磁盘，再传入 document_id 完成分块与嵌入写入 Chroma。",
+        "operationId": "ingest_from_document_library_api_knowledge_ingest_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/KnowledgeIngestBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Ingest From Document Library Api Knowledge Ingest Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/knowledge/query": {
+      "post": {
+        "tags": [
+          "knowledge"
+        ],
+        "summary": "知识库向量检索",
+        "description": "对指定 kb 做查询向量化后，在 Chroma 中检索最相近文本分块。",
+        "operationId": "query_knowledge_api_knowledge_query_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/KnowledgeQueryBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "object"
+                  },
+                  "type": "array",
+                  "title": "Response Query Knowledge Api Knowledge Query Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/knowledge/{kb_id}/documents": {
+      "get": {
+        "tags": [
+          "knowledge"
+        ],
+        "summary": "列出知识库已向量化的文档",
+        "description": "按 Chroma metadata 聚合；含 source_doc_id 时可与文档库 id 对照。",
+        "operationId": "list_knowledge_documents_api_knowledge__kb_id__documents_get",
+        "parameters": [
+          {
+            "name": "kb_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "description": "知识库分区 ID。与入库 ingest 时的 kb_id 一致；不同分区对应 Chroma 不同 collection。",
+              "title": "Kb Id"
+            },
+            "description": "知识库分区 ID。与入库 ingest 时的 kb_id 一致；不同分区对应 Chroma 不同 collection。"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  },
+                  "title": "Response List Knowledge Documents Api Knowledge  Kb Id  Documents Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/knowledge/{kb_id}/stats": {
+      "get": {
+        "tags": [
+          "knowledge"
+        ],
+        "summary": "知识库统计",
+        "description": "返回该分区当前向量分块总数等信息。",
+        "operationId": "knowledge_stats_api_knowledge__kb_id__stats_get",
+        "parameters": [
+          {
+            "name": "kb_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "description": "知识库分区 ID。与入库 ingest 时的 kb_id 一致；不同分区对应 Chroma 不同 collection。",
+              "title": "Kb Id"
+            },
+            "description": "知识库分区 ID。与入库 ingest 时的 kb_id 一致；不同分区对应 Chroma 不同 collection。"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Knowledge Stats Api Knowledge  Kb Id  Stats Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/knowledge/{kb_id}/documents/{doc_id}": {
+      "delete": {
+        "tags": [
+          "knowledge"
+        ],
+        "summary": "删除知识库某逻辑文档向量",
+        "description": "按 doc_id 删除 Chroma 中该文档全部分块；不删除文档库 SQLite 记录，不影响已发布规范条目（规范引用 doc_id 仍有效，可重新向量化后再次抽取）。",
+        "operationId": "delete_knowledge_document_api_knowledge__kb_id__documents__doc_id__delete",
+        "parameters": [
+          {
+            "name": "kb_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "description": "知识库分区 ID。与入库 ingest 时的 kb_id 一致；不同分区对应 Chroma 不同 collection。",
+              "title": "Kb Id"
+            },
+            "description": "知识库分区 ID。与入库 ingest 时的 kb_id 一致；不同分区对应 Chroma 不同 collection。"
+          },
+          {
+            "name": "doc_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "description": "Chroma 逻辑文档 id；从文档库向量化时与 document 表主键一致。未绑文档库的历史数据可能为 kb_id+文件名 哈希。",
+              "title": "Doc Id"
+            },
+            "description": "Chroma 逻辑文档 id；从文档库向量化时与 document 表主键一致。未绑文档库的历史数据可能为 kb_id+文件名 哈希。"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/spec/rules/extract": {
+      "post": {
+        "tags": [
+          "specification"
+        ],
+        "summary": "从知识库文档抽取规范实体（规则）",
+        "description": "从知识库 Chroma 检索分片；persist=true 时写入全局规则草稿。默认同一 doc_id 仅允许抽取一次；re_extract=true 时清除该文档草稿后重抽。",
+        "operationId": "extract_spec_rules_api_spec_rules_extract_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SpecRuleExtractBody"
+              },
+              "examples": {
+                "single_document": {
+                  "summary": "单文档抽取（推荐）",
+                  "value": {
+                    "kb_id": "default",
+                    "doc_ids": [
+                      "替换为已向量化文档的 UUID"
+                    ],
+                    "topic": "安全生产 现场管理",
+                    "max_rules": 10,
+                    "persist": true
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Extract Spec Rules Api Spec Rules Extract Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/spec/rules/extract/preflight": {
+      "post": {
+        "tags": [
+          "specification"
+        ],
+        "summary": "抽取前预检（文档存在、已向量化）",
+        "operationId": "extract_spec_preflight_api_spec_rules_extract_preflight_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SpecExtractPreflightBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Extract Spec Preflight Api Spec Rules Extract Preflight Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/spec/stats": {
+      "get": {
+        "tags": [
+          "specification"
+        ],
+        "summary": "规范库统计",
+        "operationId": "spec_stats_api_spec_stats_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Spec Stats Api Spec Stats Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/spec/rules/rebuild-vectors": {
+      "post": {
+        "tags": [
+          "specification"
+        ],
+        "summary": "重建全部已发布规则向量",
+        "operationId": "rebuild_spec_rule_vectors_api_spec_rules_rebuild_vectors_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Rebuild Spec Rule Vectors Api Spec Rules Rebuild Vectors Post"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/spec/query/rules": {
+      "post": {
+        "tags": [
+          "specification"
+        ],
+        "summary": "已发布规范规则向量检索",
+        "operationId": "query_spec_rules_api_spec_query_rules_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SpecRulesQueryBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "object"
+                  },
+                  "type": "array",
+                  "title": "Response Query Spec Rules Api Spec Query Rules Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/spec/rules": {
+      "get": {
+        "tags": [
+          "specification"
+        ],
+        "summary": "列出规范规则",
+        "operationId": "list_spec_rules_api_spec_rules_get",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "draft / published",
+              "title": "Status"
+            },
+            "description": "draft / published"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  },
+                  "title": "Response List Spec Rules Api Spec Rules Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "specification"
+        ],
+        "summary": "手动创建规范规则",
+        "operationId": "create_spec_rule_api_spec_rules_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SpecRuleCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Create Spec Rule Api Spec Rules Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/spec/rules/{rule_id}": {
+      "get": {
+        "tags": [
+          "specification"
+        ],
+        "summary": "获取单条规范规则",
+        "operationId": "get_spec_rule_api_spec_rules__rule_id__get",
+        "parameters": [
+          {
+            "name": "rule_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "description": "规范规则主键：SQLite 表 spec_rule 的 rule_id；发布后会写入规则向量库。",
+              "title": "Rule Id"
+            },
+            "description": "规范规则主键：SQLite 表 spec_rule 的 rule_id；发布后会写入规则向量库。"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Get Spec Rule Api Spec Rules  Rule Id  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "specification"
+        ],
+        "summary": "更新规范规则",
+        "operationId": "patch_spec_rule_api_spec_rules__rule_id__patch",
+        "parameters": [
+          {
+            "name": "rule_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "description": "规范规则主键：SQLite 表 spec_rule 的 rule_id；发布后会写入规则向量库。",
+              "title": "Rule Id"
+            },
+            "description": "规范规则主键：SQLite 表 spec_rule 的 rule_id；发布后会写入规则向量库。"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SpecRulePatch"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Patch Spec Rule Api Spec Rules  Rule Id  Patch"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "specification"
+        ],
+        "summary": "删除规范规则",
+        "operationId": "delete_spec_rule_api_spec_rules__rule_id__delete",
+        "parameters": [
+          {
+            "name": "rule_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "description": "规范规则主键：SQLite 表 spec_rule 的 rule_id；发布后会写入规则向量库。",
+              "title": "Rule Id"
+            },
+            "description": "规范规则主键：SQLite 表 spec_rule 的 rule_id；发布后会写入规则向量库。"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/spec/rules/{rule_id}/publish-readiness": {
+      "get": {
+        "tags": [
+          "specification"
+        ],
+        "summary": "发布就绪检查",
+        "operationId": "get_publish_readiness_api_spec_rules__rule_id__publish_readiness_get",
+        "parameters": [
+          {
+            "name": "rule_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "description": "规范规则主键：SQLite 表 spec_rule 的 rule_id；发布后会写入规则向量库。",
+              "title": "Rule Id"
+            },
+            "description": "规范规则主键：SQLite 表 spec_rule 的 rule_id；发布后会写入规则向量库。"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Get Publish Readiness Api Spec Rules  Rule Id  Publish Readiness Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/spec/rules/{rule_id}/publish": {
+      "post": {
+        "tags": [
+          "specification"
+        ],
+        "summary": "发布规范规则",
+        "operationId": "publish_spec_rule_api_spec_rules__rule_id__publish_post",
+        "parameters": [
+          {
+            "name": "rule_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "description": "规范规则主键：SQLite 表 spec_rule 的 rule_id；发布后会写入规则向量库。",
+              "title": "Rule Id"
+            },
+            "description": "规范规则主键：SQLite 表 spec_rule 的 rule_id；发布后会写入规则向量库。"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Publish Spec Rule Api Spec Rules  Rule Id  Publish Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/algorithm/": {
+      "get": {
+        "tags": [
+          "algorithm"
+        ],
+        "summary": "列出算法",
+        "description": "分页列出算法实体；可按 health、关键词过滤。",
+        "operationId": "list_algorithms_api_algorithm__get",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 500,
+              "minimum": 1,
+              "default": 100,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          },
+          {
+            "name": "health",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "按 health 精确过滤。",
+              "title": "Health"
+            },
+            "description": "按 health 精确过滤。"
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "按名称/说明/id 模糊搜索。",
+              "title": "Q"
+            },
+            "description": "按名称/说明/id 模糊搜索。"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response List Algorithms Api Algorithm  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "algorithm"
+        ],
+        "summary": "创建算法",
+        "operationId": "create_algorithm_api_algorithm__post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AlgorithmCreateBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Create Algorithm Api Algorithm  Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/algorithm/{algorithm_id}": {
+      "get": {
+        "tags": [
+          "algorithm"
+        ],
+        "summary": "获取单个算法",
+        "operationId": "get_algorithm_api_algorithm__algorithm_id__get",
+        "parameters": [
+          {
+            "name": "algorithm_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "description": "算法主键 algorithm_id，与入库/种子数据一致。",
+              "title": "Algorithm Id"
+            },
+            "description": "算法主键 algorithm_id，与入库/种子数据一致。"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Get Algorithm Api Algorithm  Algorithm Id  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "algorithm"
+        ],
+        "summary": "更新算法",
+        "operationId": "patch_algorithm_api_algorithm__algorithm_id__patch",
+        "parameters": [
+          {
+            "name": "algorithm_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "description": "算法主键 algorithm_id，与入库/种子数据一致。",
+              "title": "Algorithm Id"
+            },
+            "description": "算法主键 algorithm_id，与入库/种子数据一致。"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AlgorithmPatchBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Patch Algorithm Api Algorithm  Algorithm Id  Patch"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "algorithm"
+        ],
+        "summary": "删除算法",
+        "operationId": "delete_algorithm_api_algorithm__algorithm_id__delete",
+        "parameters": [
+          {
+            "name": "algorithm_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "description": "算法主键 algorithm_id，与入库/种子数据一致。",
+              "title": "Algorithm Id"
+            },
+            "description": "算法主键 algorithm_id，与入库/种子数据一致。"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Delete Algorithm Api Algorithm  Algorithm Id  Delete"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/algorithm/seed/builtin": {
+      "post": {
+        "tags": [
+          "algorithm"
+        ],
+        "summary": "导入内置种子（中广核场景评估表）",
+        "description": "从仓库内 builtin_seed.json 写入/更新 SQLite；可选清空后全量导入。",
+        "operationId": "seed_builtin_api_algorithm_seed_builtin_post",
+        "parameters": [
+          {
+            "name": "replace_all",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "为 true 时先 DELETE 全部算法再导入。",
+              "default": false,
+              "title": "Replace All"
+            },
+            "description": "为 true 时先 DELETE 全部算法再导入。"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Seed Builtin Api Algorithm Seed Builtin Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/algorithm/invoke/{algorithm_id}": {
+      "post": {
+        "tags": [
+          "algorithm"
+        ],
+        "summary": "模拟调用算法",
+        "description": "占位接口：校验 algorithm 存在后返回固定结构，便于联调。",
+        "operationId": "invoke_algorithm_api_algorithm_invoke__algorithm_id__post",
+        "parameters": [
+          {
+            "name": "algorithm_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "description": "算法主键 algorithm_id，与入库/种子数据一致。",
+              "title": "Algorithm Id"
+            },
+            "description": "算法主键 algorithm_id，与入库/种子数据一致。"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "type": "object"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Invoke Algorithm Api Algorithm Invoke  Algorithm Id  Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/equipment/": {
+      "get": {
+        "tags": [
+          "equipment"
+        ],
+        "summary": "列出设备",
+        "operationId": "list_equipment_api_equipment__get",
+        "parameters": [
+          {
+            "name": "kind",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "camera | sensor",
+              "title": "Kind"
+            },
+            "description": "camera | sensor"
+          },
+          {
+            "name": "region_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Region Id"
+            }
+          },
+          {
+            "name": "online",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Online"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Q"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 500,
+              "minimum": 1,
+              "default": 200,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response List Equipment Api Equipment  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "equipment"
+        ],
+        "summary": "创建设备",
+        "operationId": "create_equipment_api_equipment__post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EquipmentCreateBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Create Equipment Api Equipment  Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/equipment/{equipment_id}": {
+      "get": {
+        "tags": [
+          "equipment"
+        ],
+        "summary": "获取设备",
+        "operationId": "get_equipment_api_equipment__equipment_id__get",
+        "parameters": [
+          {
+            "name": "equipment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "description": "设备主键 id。",
+              "title": "Equipment Id"
+            },
+            "description": "设备主键 id。"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Get Equipment Api Equipment  Equipment Id  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "equipment"
+        ],
+        "summary": "更新设备",
+        "operationId": "patch_equipment_api_equipment__equipment_id__patch",
+        "parameters": [
+          {
+            "name": "equipment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "description": "设备主键 id。",
+              "title": "Equipment Id"
+            },
+            "description": "设备主键 id。"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EquipmentPatchBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Patch Equipment Api Equipment  Equipment Id  Patch"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "equipment"
+        ],
+        "summary": "删除设备",
+        "operationId": "delete_equipment_api_equipment__equipment_id__delete",
+        "parameters": [
+          {
+            "name": "equipment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "description": "设备主键 id。",
+              "title": "Equipment Id"
+            },
+            "description": "设备主键 id。"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/equipment/{equipment_id}/readings": {
+      "get": {
+        "tags": [
+          "equipment"
+        ],
+        "summary": "传感器历史读数",
+        "operationId": "list_sensor_readings_api_equipment__equipment_id__readings_get",
+        "parameters": [
+          {
+            "name": "equipment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "description": "设备主键 id。",
+              "title": "Equipment Id"
+            },
+            "description": "设备主键 id。"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 500,
+              "minimum": 1,
+              "default": 100,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response List Sensor Readings Api Equipment  Equipment Id  Readings Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/equipment/seed/builtin": {
+      "post": {
+        "tags": [
+          "equipment"
+        ],
+        "summary": "导入内置演示设备",
+        "operationId": "seed_builtin_equipment_api_equipment_seed_builtin_post",
+        "parameters": [
+          {
+            "name": "replace_all",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Replace All"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Seed Builtin Equipment Api Equipment Seed Builtin Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/inspection-work/": {
+      "post": {
+        "tags": [
+          "inspection-work"
+        ],
+        "summary": "手动创建巡检业务",
+        "operationId": "create_inspection_work_api_inspection_work__post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateInspectionWorkBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Create Inspection Work Api Inspection Work  Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "inspection-work"
+        ],
+        "summary": "列出巡检业务",
+        "operationId": "list_inspection_works_api_inspection_work__get",
+        "parameters": [
+          {
+            "name": "region_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "区域 ID；返回关联该区域（含多区域）的巡检业务。",
+              "title": "Region Id"
+            },
+            "description": "区域 ID；返回关联该区域（含多区域）的巡检业务。"
+          },
+          {
+            "name": "equipment_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "设备 ID；返回绑定该设备的巡检业务。",
+              "title": "Equipment Id"
+            },
+            "description": "设备 ID；返回绑定该设备的巡检业务。"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 500,
+              "minimum": 1,
+              "default": 100,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response List Inspection Works Api Inspection Work  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/inspection-work/{work_id}": {
+      "patch": {
+        "tags": [
+          "inspection-work"
+        ],
+        "summary": "部分更新巡检业务",
+        "operationId": "patch_inspection_work_api_inspection_work__work_id__patch",
+        "parameters": [
+          {
+            "name": "work_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "description": "巡检业务主键 work_id。",
+              "title": "Work Id"
+            },
+            "description": "巡检业务主键 work_id。"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PatchInspectionWorkBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Patch Inspection Work Api Inspection Work  Work Id  Patch"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "inspection-work"
+        ],
+        "summary": "获取单条巡检业务",
+        "operationId": "get_inspection_work_api_inspection_work__work_id__get",
+        "parameters": [
+          {
+            "name": "work_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "description": "巡检业务主键 work_id。",
+              "title": "Work Id"
+            },
+            "description": "巡检业务主键 work_id。"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Get Inspection Work Api Inspection Work  Work Id  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "inspection-work"
+        ],
+        "summary": "删除巡检业务",
+        "operationId": "delete_inspection_work_api_inspection_work__work_id__delete",
+        "parameters": [
+          {
+            "name": "work_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "description": "巡检业务主键 work_id。",
+              "title": "Work Id"
+            },
+            "description": "巡检业务主键 work_id。"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Delete Inspection Work Api Inspection Work  Work Id  Delete"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/inspection-work/generate": {
+      "post": {
+        "tags": [
+          "inspection-work"
+        ],
+        "summary": "智能匹配规则与算法并生成巡检业务",
+        "description": "读取已发布规范与平台算法目录，经单次 LLM 编组输出巡检业务列表；实体字段含 work_id（仅 persist 后有效）、name、region_id、region_ids、desc、rule_set（含 rule_id）、algorithm_set（含 algorithm_id）、equipment_set。",
+        "operationId": "generate_inspection_work_api_inspection_work_generate_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateInspectionWorkBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Generate Inspection Work Api Inspection Work Generate Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/inspection-events/": {
+      "get": {
+        "tags": [
+          "inspection-events"
+        ],
+        "summary": "列出巡检事件",
+        "operationId": "list_inspection_events_api_inspection_events__get",
+        "parameters": [
+          {
+            "name": "kind",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "video | sensor",
+              "title": "Kind"
+            },
+            "description": "video | sensor"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          },
+          {
+            "name": "work_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Work Id"
+            }
+          },
+          {
+            "name": "region_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Region Id"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Q"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 500,
+              "minimum": 1,
+              "default": 200,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response List Inspection Events Api Inspection Events  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/inspection-events/stats": {
+      "get": {
+        "tags": [
+          "inspection-events"
+        ],
+        "summary": "看板统计与趋势",
+        "operationId": "inspection_dashboard_stats_api_inspection_events_stats_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Inspection Dashboard Stats Api Inspection Events Stats Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/inspection-events/runtime/works": {
+      "get": {
+        "tags": [
+          "inspection-events"
+        ],
+        "summary": "巡检业务运行态",
+        "operationId": "inspection_work_runtime_api_inspection_events_runtime_works_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Inspection Work Runtime Api Inspection Events Runtime Works Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/inspection-events/{event_id}": {
+      "get": {
+        "tags": [
+          "inspection-events"
+        ],
+        "summary": "获取单条巡检事件",
+        "operationId": "get_inspection_event_api_inspection_events__event_id__get",
+        "parameters": [
+          {
+            "name": "event_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "description": "巡检事件主键 event_id。",
+              "title": "Event Id"
+            },
+            "description": "巡检事件主键 event_id。"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Get Inspection Event Api Inspection Events  Event Id  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "inspection-events"
+        ],
+        "summary": "更新巡检事件状态",
+        "operationId": "patch_inspection_event_api_inspection_events__event_id__patch",
+        "parameters": [
+          {
+            "name": "event_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "description": "巡检事件主键 event_id。",
+              "title": "Event Id"
+            },
+            "description": "巡检事件主键 event_id。"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InspectionEventPatchBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Patch Inspection Event Api Inspection Events  Event Id  Patch"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "inspection-events"
+        ],
+        "summary": "删除巡检事件",
+        "operationId": "delete_inspection_event_api_inspection_events__event_id__delete",
+        "parameters": [
+          {
+            "name": "event_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "description": "巡检事件主键 event_id。",
+              "title": "Event Id"
+            },
+            "description": "巡检事件主键 event_id。"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/inspection-events/seed/builtin": {
+      "post": {
+        "tags": [
+          "inspection-events"
+        ],
+        "summary": "导入内置演示事件",
+        "operationId": "seed_builtin_events_api_inspection_events_seed_builtin_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Seed Builtin Events Api Inspection Events Seed Builtin Post"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/report-templates/": {
+      "get": {
+        "tags": [
+          "reports"
+        ],
+        "summary": "列出报告模版",
+        "operationId": "list_report_templates_api_report_templates__get",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Q"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 500,
+              "minimum": 1,
+              "default": 200,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response List Report Templates Api Report Templates  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "reports"
+        ],
+        "summary": "创建报告模版",
+        "operationId": "create_report_template_api_report_templates__post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReportTemplateCreateBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Create Report Template Api Report Templates  Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/report-templates/{template_id}": {
+      "get": {
+        "tags": [
+          "reports"
+        ],
+        "summary": "获取报告模版",
+        "operationId": "get_report_template_api_report_templates__template_id__get",
+        "parameters": [
+          {
+            "name": "template_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "title": "Template Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Get Report Template Api Report Templates  Template Id  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "reports"
+        ],
+        "summary": "更新报告模版",
+        "operationId": "patch_report_template_api_report_templates__template_id__patch",
+        "parameters": [
+          {
+            "name": "template_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "title": "Template Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReportTemplatePatchBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Patch Report Template Api Report Templates  Template Id  Patch"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "reports"
+        ],
+        "summary": "删除报告模版",
+        "operationId": "delete_report_template_api_report_templates__template_id__delete",
+        "parameters": [
+          {
+            "name": "template_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "title": "Template Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/report-plans/": {
+      "get": {
+        "tags": [
+          "reports"
+        ],
+        "summary": "列出报告生成计划",
+        "operationId": "list_report_plans_api_report_plans__get",
+        "parameters": [
+          {
+            "name": "frequency",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Frequency"
+            }
+          },
+          {
+            "name": "enabled",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Enabled"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Q"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 500,
+              "minimum": 1,
+              "default": 200,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response List Report Plans Api Report Plans  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "reports"
+        ],
+        "summary": "创建报告生成计划",
+        "operationId": "create_report_plan_api_report_plans__post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReportPlanCreateBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Create Report Plan Api Report Plans  Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/report-plans/{plan_id}": {
+      "get": {
+        "tags": [
+          "reports"
+        ],
+        "summary": "获取报告生成计划",
+        "operationId": "get_report_plan_api_report_plans__plan_id__get",
+        "parameters": [
+          {
+            "name": "plan_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "title": "Plan Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Get Report Plan Api Report Plans  Plan Id  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "reports"
+        ],
+        "summary": "更新报告生成计划",
+        "operationId": "patch_report_plan_api_report_plans__plan_id__patch",
+        "parameters": [
+          {
+            "name": "plan_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "title": "Plan Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReportPlanPatchBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Patch Report Plan Api Report Plans  Plan Id  Patch"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "reports"
+        ],
+        "summary": "删除报告生成计划",
+        "operationId": "delete_report_plan_api_report_plans__plan_id__delete",
+        "parameters": [
+          {
+            "name": "plan_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "title": "Plan Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/report-plans/{plan_id}/toggle": {
+      "post": {
+        "tags": [
+          "reports"
+        ],
+        "summary": "切换计划启用状态",
+        "operationId": "toggle_report_plan_api_report_plans__plan_id__toggle_post",
+        "parameters": [
+          {
+            "name": "plan_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "title": "Plan Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Toggle Report Plan Api Report Plans  Plan Id  Toggle Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/report-plans/{plan_id}/generate": {
+      "post": {
+        "tags": [
+          "reports"
+        ],
+        "summary": "按计划生成巡检报告",
+        "operationId": "generate_report_from_plan_api_report_plans__plan_id__generate_post",
+        "parameters": [
+          {
+            "name": "plan_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "title": "Plan Id"
+            }
+          },
+          {
+            "name": "source",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "manual",
+              "title": "Source"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Generate Report From Plan Api Report Plans  Plan Id  Generate Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/inspection-reports/generate-adhoc": {
+      "post": {
+        "tags": [
+          "reports"
+        ],
+        "summary": "临时生成巡检报告",
+        "operationId": "generate_adhoc_report_api_inspection_reports_generate_adhoc_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdhocReportGenerateBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Generate Adhoc Report Api Inspection Reports Generate Adhoc Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/inspection-reports/": {
+      "get": {
+        "tags": [
+          "reports"
+        ],
+        "summary": "列出巡检报告",
+        "operationId": "list_inspection_reports_api_inspection_reports__get",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          },
+          {
+            "name": "frequency",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Frequency"
+            }
+          },
+          {
+            "name": "plan_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Plan Id"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Q"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 500,
+              "minimum": 1,
+              "default": 200,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response List Inspection Reports Api Inspection Reports  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "reports"
+        ],
+        "summary": "创建巡检报告",
+        "operationId": "create_inspection_report_api_inspection_reports__post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InspectionReportCreateBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Create Inspection Report Api Inspection Reports  Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/inspection-reports/{report_id}": {
+      "get": {
+        "tags": [
+          "reports"
+        ],
+        "summary": "获取巡检报告",
+        "operationId": "get_inspection_report_api_inspection_reports__report_id__get",
+        "parameters": [
+          {
+            "name": "report_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "title": "Report Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Get Inspection Report Api Inspection Reports  Report Id  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "reports"
+        ],
+        "summary": "更新巡检报告",
+        "operationId": "patch_inspection_report_api_inspection_reports__report_id__patch",
+        "parameters": [
+          {
+            "name": "report_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "title": "Report Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InspectionReportPatchBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Patch Inspection Report Api Inspection Reports  Report Id  Patch"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "reports"
+        ],
+        "summary": "删除巡检报告",
+        "operationId": "delete_inspection_report_api_inspection_reports__report_id__delete",
+        "parameters": [
+          {
+            "name": "report_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "title": "Report Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/inspection-reports/{report_id}/publish": {
+      "post": {
+        "tags": [
+          "reports"
+        ],
+        "summary": "发布巡检报告",
+        "operationId": "publish_inspection_report_api_inspection_reports__report_id__publish_post",
+        "parameters": [
+          {
+            "name": "report_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "title": "Report Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Publish Inspection Report Api Inspection Reports  Report Id  Publish Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/inspection-reports/seed/builtin": {
+      "post": {
+        "tags": [
+          "reports"
+        ],
+        "summary": "导入内置演示报告数据",
+        "operationId": "seed_builtin_reports_api_inspection_reports_seed_builtin_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Seed Builtin Reports Api Inspection Reports Seed Builtin Post"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "登录",
+        "operationId": "login_api_auth_login_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Login Api Auth Login Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/logout": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "退出登录",
+        "operationId": "logout_api_auth_logout_post",
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          }
+        }
+      }
+    },
+    "/api/auth/me": {
+      "get": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "当前用户",
+        "operationId": "me_api_auth_me_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Me Api Auth Me Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/permissions": {
+      "get": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "系统页面权限 id 列表",
+        "operationId": "list_permissions_api_auth_permissions_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response List Permissions Api Auth Permissions Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/users/": {
+      "get": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "列出用户",
+        "operationId": "list_users_api_auth_users__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response List Users Api Auth Users  Get"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "创建用户",
+        "operationId": "create_user_api_auth_users__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserCreateBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Create User Api Auth Users  Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/users/{user_id}": {
+      "patch": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "更新用户",
+        "operationId": "patch_user_api_auth_users__user_id__patch",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "title": "User Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserPatchBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Patch User Api Auth Users  User Id  Patch"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "删除用户",
+        "operationId": "delete_user_api_auth_users__user_id__delete",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "title": "User Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/seed/builtin": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "导入内置演示用户",
+        "operationId": "seed_builtin_users_api_auth_seed_builtin_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Seed Builtin Users Api Auth Seed Builtin Post"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AdhocReportGenerateBody": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 512,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "work_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Work Ids"
+          },
+          "content_prompt": {
+            "type": "string",
+            "maxLength": 8000,
+            "title": "Content Prompt",
+            "default": ""
+          },
+          "template_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Template Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "AdhocReportGenerateBody"
+      },
+      "AlgorithmCreateBody": {
+        "properties": {
+          "algorithm_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Algorithm Id",
+            "description": "可选自定义主键；不传则服务端生成。"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 512,
+            "minLength": 1,
+            "title": "Name",
+            "description": "算法名称。"
+          },
+          "desc": {
+            "type": "string",
+            "maxLength": 16000,
+            "title": "Desc",
+            "description": "说明。",
+            "default": ""
+          },
+          "link": {
+            "type": "string",
+            "maxLength": 2048,
+            "title": "Link",
+            "description": "请求地址或路由。",
+            "default": ""
+          },
+          "schema": {
+            "type": "object",
+            "title": "Schema",
+            "description": "出入参 JSON Schema 或业务约定结构。"
+          },
+          "health": {
+            "type": "string",
+            "maxLength": 64,
+            "title": "Health",
+            "description": "健康/可用性状态字符串。",
+            "default": "unknown"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "AlgorithmCreateBody"
+      },
+      "AlgorithmPatchBody": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 512
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "desc": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 16000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Desc"
+          },
+          "link": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 2048
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Link"
+          },
+          "schema": {
+            "anyOf": [
+              {
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Schema"
+          },
+          "health": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Health"
+          }
+        },
+        "type": "object",
+        "title": "AlgorithmPatchBody"
+      },
+      "Body_upload_document_api_document__post": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary",
+            "title": "File",
+            "description": "上传文件二进制内容。"
+          },
+          "doc_type": {
+            "type": "string",
+            "title": "Doc Type",
+            "description": "文档类别/来源标签，必填。"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name",
+            "description": "展示用文件名；不传则使用上传文件的原始文件名。"
+          }
+        },
+        "type": "object",
+        "required": [
+          "file",
+          "doc_type"
+        ],
+        "title": "Body_upload_document_api_document__post"
+      },
+      "ChatBody": {
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 4,
+            "title": "Session Id",
+            "description": "会话标识；同一 id 多轮对话共享上下文。建议使用随机字符串或业务会话号。"
+          },
+          "message": {
+            "type": "string",
+            "maxLength": 32000,
+            "minLength": 1,
+            "title": "Message",
+            "description": "用户本轮输入的纯文本；由主 Agent（ReAct）处理并流式返回 SSE 事件。"
+          }
+        },
+        "type": "object",
+        "required": [
+          "session_id",
+          "message"
+        ],
+        "title": "ChatBody"
+      },
+      "CreateInspectionWorkBody": {
+        "properties": {
+          "work_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Work Id",
+            "description": "可选；已存在则 409。"
+          },
+          "region_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Region Id",
+            "description": "可选；不传时由 equipment_set 推导。"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "desc": {
+            "type": "string",
+            "maxLength": 8000,
+            "title": "Desc",
+            "default": ""
+          },
+          "rule_set": {
+            "items": {
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Rule Set"
+          },
+          "algorithm_set": {
+            "items": {
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Algorithm Set"
+          },
+          "equipment_set": {
+            "items": {
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Equipment Set"
+          },
+          "equipment_algo_params": {
+            "type": "object",
+            "title": "Equipment Algo Params"
+          },
+          "schedule_mode": {
+            "type": "string",
+            "maxLength": 32,
+            "title": "Schedule Mode",
+            "default": "manual"
+          },
+          "schedule_interval": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Schedule Interval"
+          },
+          "schedule_times": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 256
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Schedule Times"
+          },
+          "source": {
+            "type": "string",
+            "maxLength": 16,
+            "title": "Source",
+            "default": "manual"
+          },
+          "work_status": {
+            "type": "string",
+            "maxLength": 16,
+            "title": "Work Status",
+            "default": "online"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "CreateInspectionWorkBody"
+      },
+      "DocumentPatchBody": {
+        "properties": {
+          "doc_type": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 256
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Doc Type"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 512
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          }
+        },
+        "type": "object",
+        "title": "DocumentPatchBody"
+      },
+      "EquipmentCreateBody": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id",
+            "description": "可选；冲突则 409。"
+          },
+          "kind": {
+            "type": "string",
+            "title": "Kind",
+            "description": "camera | sensor"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 512,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "region_id": {
+            "type": "string",
+            "maxLength": 128,
+            "title": "Region Id",
+            "default": ""
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 4000,
+            "title": "Description",
+            "default": ""
+          },
+          "platform_name": {
+            "type": "string",
+            "maxLength": 512,
+            "title": "Platform Name",
+            "default": ""
+          },
+          "platform_address": {
+            "type": "string",
+            "maxLength": 2048,
+            "title": "Platform Address",
+            "default": ""
+          },
+          "thumbnail": {
+            "type": "string",
+            "maxLength": 2048,
+            "title": "Thumbnail",
+            "default": ""
+          },
+          "data_type": {
+            "type": "string",
+            "maxLength": 128,
+            "title": "Data Type",
+            "default": ""
+          },
+          "unit": {
+            "type": "string",
+            "maxLength": 64,
+            "title": "Unit",
+            "default": ""
+          },
+          "online": {
+            "type": "boolean",
+            "title": "Online",
+            "default": true
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "name"
+        ],
+        "title": "EquipmentCreateBody"
+      },
+      "EquipmentPatchBody": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 512,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "region_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Region Id"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 4000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "platform_name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 512
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Platform Name"
+          },
+          "platform_address": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 2048
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Platform Address"
+          },
+          "thumbnail": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 2048
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Thumbnail"
+          },
+          "data_type": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Data Type"
+          },
+          "unit": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unit"
+          },
+          "online": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Online"
+          }
+        },
+        "type": "object",
+        "title": "EquipmentPatchBody"
+      },
+      "GenerateInspectionWorkBody": {
+        "properties": {
+          "region_id": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Region Id",
+            "description": "参考区域 ID；用于筛选该区域设备并辅助 LLM 编组。"
+          },
+          "max_works": {
+            "type": "integer",
+            "maximum": 30.0,
+            "minimum": 1.0,
+            "title": "Max Works",
+            "description": "模型最多生成的巡检业务条数。",
+            "default": 10
+          },
+          "model_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Name",
+            "description": "聊天模型名；不传用默认。"
+          },
+          "persist": {
+            "type": "boolean",
+            "title": "Persist",
+            "description": "为 true 时将生成的巡检业务写入 SQLite（inspection_work 表）。",
+            "default": false
+          },
+          "algorithm_limit": {
+            "type": "integer",
+            "maximum": 400.0,
+            "minimum": 20.0,
+            "title": "Algorithm Limit",
+            "description": "参与匹配的算法目录最大条数（越小越快、越不易超时）。",
+            "default": 120
+          },
+          "rule_desc_max_chars": {
+            "type": "integer",
+            "maximum": 4000.0,
+            "minimum": 80.0,
+            "title": "Rule Desc Max Chars",
+            "description": "送入 LLM 的规则 desc 最大字符数。",
+            "default": 400
+          },
+          "rule_requirements_max_chars": {
+            "type": "integer",
+            "maximum": 8000.0,
+            "minimum": 200.0,
+            "title": "Rule Requirements Max Chars",
+            "description": "送入 LLM 的规则 requirements 最大字符数。",
+            "default": 1200
+          },
+          "algorithm_desc_max_chars": {
+            "type": "integer",
+            "maximum": 800.0,
+            "minimum": 80.0,
+            "title": "Algorithm Desc Max Chars",
+            "description": "送入 LLM 的算法说明最大字符数。",
+            "default": 400
+          }
+        },
+        "type": "object",
+        "required": [
+          "region_id"
+        ],
+        "title": "GenerateInspectionWorkBody"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "InspectionEventPatchBody": {
+        "properties": {
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status",
+            "description": "pending | processing | resolved | ignored"
+          },
+          "handler": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Handler"
+          },
+          "handled_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Handled At"
+          },
+          "resolution_outcome": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 256
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resolution Outcome"
+          },
+          "resolution_detail": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 4000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resolution Detail"
+          }
+        },
+        "type": "object",
+        "title": "InspectionEventPatchBody"
+      },
+      "InspectionReportCreateBody": {
+        "properties": {
+          "report_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Report Id"
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 512,
+            "minLength": 1,
+            "title": "Title"
+          },
+          "period": {
+            "type": "string",
+            "maxLength": 128,
+            "title": "Period",
+            "default": ""
+          },
+          "frequency": {
+            "type": "string",
+            "maxLength": 32,
+            "title": "Frequency",
+            "default": "weekly"
+          },
+          "work_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Work Ids"
+          },
+          "status": {
+            "type": "string",
+            "maxLength": 32,
+            "title": "Status",
+            "default": "draft"
+          },
+          "source": {
+            "type": "string",
+            "maxLength": 32,
+            "title": "Source",
+            "default": "manual"
+          },
+          "content_prompt": {
+            "type": "string",
+            "maxLength": 8000,
+            "title": "Content Prompt",
+            "default": ""
+          },
+          "plan_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Plan Id"
+          },
+          "plan_name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 512
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Plan Name"
+          },
+          "template_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Template Id"
+          },
+          "template_name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 512
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Template Name"
+          },
+          "summary": {
+            "type": "string",
+            "maxLength": 8000,
+            "title": "Summary",
+            "default": ""
+          },
+          "sections": {
+            "items": {
+              "$ref": "#/components/schemas/ReportSectionBody"
+            },
+            "type": "array",
+            "title": "Sections"
+          },
+          "full_text": {
+            "type": "string",
+            "maxLength": 64000,
+            "title": "Full Text",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "title"
+        ],
+        "title": "InspectionReportCreateBody"
+      },
+      "InspectionReportPatchBody": {
+        "properties": {
+          "title": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 512,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "period": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Period"
+          },
+          "frequency": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 32
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Frequency"
+          },
+          "work_ids": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Work Ids"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 32
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status"
+          },
+          "source": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 32
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source"
+          },
+          "content_prompt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 8000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Content Prompt"
+          },
+          "plan_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Plan Id"
+          },
+          "plan_name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 512
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Plan Name"
+          },
+          "template_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Template Id"
+          },
+          "template_name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 512
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Template Name"
+          },
+          "summary": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 8000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Summary"
+          },
+          "sections": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/ReportSectionBody"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sections"
+          },
+          "full_text": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Full Text"
+          }
+        },
+        "type": "object",
+        "title": "InspectionReportPatchBody"
+      },
+      "KnowledgeIngestBody": {
+        "properties": {
+          "document_id": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Document Id",
+            "description": "文档库 SQLite 主键（须先 POST /api/document 上传）；向量化读取磁盘原文。"
+          },
+          "kb_id": {
+            "type": "string",
+            "maxLength": 64,
+            "title": "Kb Id",
+            "description": "知识库分区 ID；同一 kb 下不同 document 数据隔离。",
+            "default": "default"
+          },
+          "replace": {
+            "type": "boolean",
+            "title": "Replace",
+            "description": "为 true 时，写入前先删除该 document 在 Chroma 中的已有分块。",
+            "default": true
+          },
+          "max_chars": {
+            "type": "integer",
+            "maximum": 4000.0,
+            "minimum": 200.0,
+            "title": "Max Chars",
+            "description": "分块最大字符数。",
+            "default": 900
+          },
+          "overlap": {
+            "type": "integer",
+            "maximum": 500.0,
+            "minimum": 0.0,
+            "title": "Overlap",
+            "description": "相邻块重叠字符数。",
+            "default": 120
+          }
+        },
+        "type": "object",
+        "required": [
+          "document_id"
+        ],
+        "title": "KnowledgeIngestBody"
+      },
+      "KnowledgeQueryBody": {
+        "properties": {
+          "kb_id": {
+            "type": "string",
+            "maxLength": 64,
+            "title": "Kb Id",
+            "description": "要检索的知识库分区 ID，须与入库时一致。",
+            "default": "default"
+          },
+          "query": {
+            "type": "string",
+            "maxLength": 8000,
+            "minLength": 1,
+            "title": "Query",
+            "description": "自然语言问句；将向量化后在同库分块中做相似度检索。"
+          },
+          "top_k": {
+            "type": "integer",
+            "maximum": 50.0,
+            "minimum": 1.0,
+            "title": "Top K",
+            "description": "返回相似分块条数上限（按相似度截断）。",
+            "default": 5
+          },
+          "doc_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Doc Id",
+            "description": "可选。仅在 metadata.doc_id 等于该值的分块内检索（通常即 document.id）。"
+          },
+          "source_doc_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 256
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Doc Id",
+            "description": "可选。仅在 metadata.source_doc_id 等于该值的分块内检索（与 document.id 一致）。"
+          }
+        },
+        "type": "object",
+        "required": [
+          "query"
+        ],
+        "title": "KnowledgeQueryBody"
+      },
+      "LoginBody": {
+        "properties": {
+          "account": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Account"
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Password"
+          }
+        },
+        "type": "object",
+        "required": [
+          "account",
+          "password"
+        ],
+        "title": "LoginBody"
+      },
+      "PatchInspectionWorkBody": {
+        "properties": {
+          "region_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Region Id"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "desc": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 8000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Desc"
+          },
+          "rule_set": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rule Set"
+          },
+          "algorithm_set": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Algorithm Set"
+          },
+          "equipment_set": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Equipment Set"
+          },
+          "equipment_algo_params": {
+            "anyOf": [
+              {
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Equipment Algo Params"
+          },
+          "schedule_mode": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 32
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Schedule Mode"
+          },
+          "schedule_interval": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Schedule Interval"
+          },
+          "schedule_times": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 256
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Schedule Times"
+          },
+          "source": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 16
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source"
+          },
+          "work_status": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 16
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Work Status"
+          }
+        },
+        "type": "object",
+        "title": "PatchInspectionWorkBody"
+      },
+      "RegionCreatePayload": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1,
+            "title": "Id",
+            "description": "新建区域的 id，须唯一；可与业务上的区域编码一致。"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 512,
+            "title": "Name",
+            "description": "区域展示名称；可为空字符串。",
+            "default": ""
+          },
+          "desc": {
+            "type": "string",
+            "maxLength": 2048,
+            "title": "Desc",
+            "description": "区域说明、职责描述等；可为空。",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "title": "RegionCreatePayload"
+      },
+      "RegionMetaOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id",
+            "description": "区域主键。"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "description": "展示名称。"
+          },
+          "desc": {
+            "type": "string",
+            "title": "Desc",
+            "description": "说明文字。"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At",
+            "description": "创建时间 ISO 字符串。"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "desc",
+          "created_at"
+        ],
+        "title": "RegionMetaOut",
+        "description": "与 SQLite 行一致，供 OpenAPI / 客户端生成类型。"
+      },
+      "RegionPatchPayload": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 512
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name",
+            "description": "新展示名；不传不改。"
+          },
+          "desc": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 2048
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Desc",
+            "description": "新说明；不传不改。"
+          }
+        },
+        "type": "object",
+        "title": "RegionPatchPayload"
+      },
+      "ReportPlanCreateBody": {
+        "properties": {
+          "plan_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Plan Id"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 512,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled",
+            "default": true
+          },
+          "frequency": {
+            "type": "string",
+            "title": "Frequency",
+            "description": "daily | weekly | monthly",
+            "default": "daily"
+          },
+          "work_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Work Ids"
+          },
+          "content_prompt": {
+            "type": "string",
+            "maxLength": 8000,
+            "title": "Content Prompt",
+            "default": ""
+          },
+          "template_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Template Id"
+          },
+          "weekday": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 7.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Weekday"
+          },
+          "month_day": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 28.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Month Day"
+          },
+          "generate_time": {
+            "type": "string",
+            "maxLength": 16,
+            "title": "Generate Time",
+            "default": "08:00"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "ReportPlanCreateBody"
+      },
+      "ReportPlanPatchBody": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 512,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "enabled": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Enabled"
+          },
+          "frequency": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Frequency",
+            "description": "daily | weekly | monthly"
+          },
+          "work_ids": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Work Ids"
+          },
+          "content_prompt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 8000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Content Prompt"
+          },
+          "template_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Template Id"
+          },
+          "weekday": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 7.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Weekday"
+          },
+          "month_day": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 28.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Month Day"
+          },
+          "generate_time": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 16
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Generate Time"
+          }
+        },
+        "type": "object",
+        "title": "ReportPlanPatchBody"
+      },
+      "ReportSectionBody": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 128,
+            "title": "Id"
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 256,
+            "title": "Title"
+          },
+          "body": {
+            "type": "string",
+            "maxLength": 16000,
+            "title": "Body",
+            "default": ""
+          },
+          "detail": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 32000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "ReportSectionBody"
+      },
+      "ReportTemplateCreateBody": {
+        "properties": {
+          "template_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Template Id"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 512,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "filename": {
+            "type": "string",
+            "maxLength": 512,
+            "title": "Filename",
+            "default": ""
+          },
+          "outline": {
+            "type": "string",
+            "maxLength": 32000,
+            "title": "Outline",
+            "default": ""
+          },
+          "uploaded_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Uploaded At"
+          },
+          "size_label": {
+            "type": "string",
+            "maxLength": 64,
+            "title": "Size Label",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "ReportTemplateCreateBody"
+      },
+      "ReportTemplatePatchBody": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 512,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "filename": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 512
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Filename"
+          },
+          "outline": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 32000
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Outline"
+          },
+          "uploaded_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Uploaded At"
+          },
+          "size_label": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Size Label"
+          }
+        },
+        "type": "object",
+        "title": "ReportTemplatePatchBody"
+      },
+      "SpecExtractPreflightBody": {
+        "properties": {
+          "kb_id": {
+            "type": "string",
+            "maxLength": 64,
+            "title": "Kb Id",
+            "default": "default"
+          },
+          "doc_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 12,
+            "minItems": 1,
+            "title": "Doc Ids"
+          }
+        },
+        "type": "object",
+        "required": [
+          "doc_ids"
+        ],
+        "title": "SpecExtractPreflightBody"
+      },
+      "SpecRuleCreate": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 512,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "desc": {
+            "type": "string",
+            "maxLength": 8000,
+            "title": "Desc",
+            "default": ""
+          },
+          "source": {
+            "type": "string",
+            "maxLength": 512,
+            "title": "Source",
+            "default": ""
+          },
+          "requirements": {
+            "type": "string",
+            "maxLength": 32000,
+            "title": "Requirements",
+            "default": ""
+          },
+          "doc_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Doc Id"
+          },
+          "level": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Level"
+          },
+          "recommended_algorithms": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recommended Algorithms"
+          },
+          "algorithm_reasoning": {
+            "type": "string",
+            "maxLength": 8000,
+            "title": "Algorithm Reasoning",
+            "default": ""
+          },
+          "source_trace": {
+            "anyOf": [
+              {
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Trace",
+            "description": "来源追溯信息（doc_id、document_name 等）"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "SpecRuleCreate"
+      },
+      "SpecRuleExtractBody": {
+        "properties": {
+          "kb_id": {
+            "type": "string",
+            "maxLength": 64,
+            "title": "Kb Id",
+            "description": "知识库分区 id；须先对文档库中的 document_id 执行 POST /api/knowledge/ingest 向量化。",
+            "default": "default"
+          },
+          "doc_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 12,
+            "minItems": 1,
+            "title": "Doc Ids",
+            "description": "须显式指定至少一个已向量化文档：元素为 Chroma 的 doc_id（与 POST /api/knowledge/ingest 的 document_id、文档库主键一致）。"
+          },
+          "topic": {
+            "type": "string",
+            "maxLength": 2000,
+            "title": "Topic",
+            "default": ""
+          },
+          "max_rules": {
+            "type": "integer",
+            "maximum": 30.0,
+            "minimum": 1.0,
+            "title": "Max Rules",
+            "default": 10
+          },
+          "model_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Name"
+          },
+          "persist": {
+            "type": "boolean",
+            "title": "Persist",
+            "default": false
+          },
+          "re_extract": {
+            "type": "boolean",
+            "title": "Re Extract",
+            "description": "为 true 时允许对已抽取文档再次抽取：先清除该 doc 下全部草稿规则，已发布条目保留；须 persist=true。",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "doc_ids"
+        ],
+        "title": "SpecRuleExtractBody"
+      },
+      "SpecRulePatch": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 512
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "desc": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Desc"
+          },
+          "source": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 512
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source"
+          },
+          "requirements": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Requirements"
+          },
+          "level": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Level"
+          },
+          "doc_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Doc Id"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status"
+          },
+          "recommended_algorithms": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recommended Algorithms"
+          },
+          "algorithm_reasoning": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Algorithm Reasoning"
+          },
+          "source_trace": {
+            "anyOf": [
+              {
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Trace"
+          }
+        },
+        "type": "object",
+        "title": "SpecRulePatch"
+      },
+      "SpecRulesQueryBody": {
+        "properties": {
+          "query": {
+            "type": "string",
+            "maxLength": 8000,
+            "minLength": 1,
+            "title": "Query"
+          },
+          "top_k": {
+            "type": "integer",
+            "maximum": 30.0,
+            "minimum": 1.0,
+            "title": "Top K",
+            "default": 5
+          }
+        },
+        "type": "object",
+        "required": [
+          "query"
+        ],
+        "title": "SpecRulesQueryBody"
+      },
+      "UserCreateBody": {
+        "properties": {
+          "user_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "User Id"
+          },
+          "account": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Account"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 4,
+            "title": "Password"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "description": "active | disabled",
+            "default": "active"
+          },
+          "permissions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Permissions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "account",
+          "name",
+          "password"
+        ],
+        "title": "UserCreateBody"
+      },
+      "UserPatchBody": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status",
+            "description": "active | disabled"
+          },
+          "password": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128,
+                "minLength": 4
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Password"
+          },
+          "permissions": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Permissions",
+            "description": "页面权限 id 列表"
+          }
+        },
+        "type": "object",
+        "title": "UserPatchBody"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}

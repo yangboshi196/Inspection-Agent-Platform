@@ -1,0 +1,173 @@
+﻿{
+  "siliconflow": {
+    "chat": [
+      {
+        "name": "deepseek-ai/DeepSeek-V4-Flash",
+        "source": {
+          "type": "api",
+          "url": "https://api.siliconflow.cn/v1",
+          "url_ref": "env:SILICONFLOW_CHAT_BASE_URL",
+          "key_ref": "env:SILICONFLOW_API_KEY"
+        },
+        "impl": "openai_compat",
+        "provider": "siliconflow",
+        "timeout_ms": 180000,
+        "connect_timeout_ms": 5000,
+        "max_retries": 2,
+        "retry_backoff_ms": 300,
+        "concurrency_limit": 0,
+        "tags": ["default"]
+      },
+      {
+        "name": "deepseek-ai/DeepSeek-V3.2",
+        "source": {
+          "type": "api",
+          "url": "https://api.siliconflow.cn/v1",
+          "url_ref": "env:SILICONFLOW_CHAT_BASE_URL",
+          "key_ref": "env:SILICONFLOW_API_KEY"
+        },
+        "impl": "openai_compat",
+        "provider": "siliconflow",
+        "timeout_ms": 180000,
+        "connect_timeout_ms": 5000,
+        "max_retries": 2,
+        "retry_backoff_ms": 300,
+        "concurrency_limit": 0,
+        "tags": ["backup"]
+      },
+      {
+        "name": "Qwen/Qwen3-235B-A22B-Instruct-2507",
+        "source": {
+          "type": "api",
+          "url": "https://api.siliconflow.cn/v1",
+          "url_ref": "env:SILICONFLOW_CHAT_BASE_URL",
+          "key_ref": "env:SILICONFLOW_API_KEY"
+        },
+        "impl": "openai_compat",
+        "provider": "siliconflow",
+        "timeout_ms": 180000,
+        "connect_timeout_ms": 5000,
+        "max_retries": 2,
+        "retry_backoff_ms": 300,
+        "concurrency_limit": 0,
+        "tags": ["backup"]
+      }
+    ],
+    "embedding": [
+      {
+        "name": "Qwen/Qwen3-Embedding-0.6B",
+        "source": {
+          "type": "api",
+          "url": "https://api.siliconflow.cn/v1",
+          "url_ref": "env:SILICONFLOW_EMBED_BASE_URL",
+          "key_ref": "env:SILICONFLOW_EMBED_API_KEY"
+        },
+        "impl": "openai_compat",
+        "provider": "siliconflow",
+        "timeout_ms": 120000,
+        "connect_timeout_ms": 5000,
+        "max_retries": 2,
+        "retry_backoff_ms": 300,
+        "concurrency_limit": 0,
+        "tags": ["default"]
+      }
+    ]
+  },
+  "vllm": {
+    "chat": [
+      {
+        "name": "qwen3_vl_8b_instruct_fp8_chat",
+        "source": { "type": "local", "url": "http://10.19.155.42:8000", "key_ref": null },
+        "impl": "vllm",
+        "provider": "vllm",
+        "timeout_ms": 60000,
+        "connect_timeout_ms": 5000,
+        "max_retries": 1,
+        "retry_backoff_ms": 200,
+        "concurrency_limit": 0,
+        "tags": ["backup", "multimodal", "vl"]
+      },
+      {
+        "name": "qwen2_5_vl_7b_instruct_chat",
+        "source": { "type": "local", "url": "http://10.19.155.42:8001", "key_ref": null },
+        "impl": "vllm",
+        "provider": "vllm",
+        "timeout_ms": 60000,
+        "connect_timeout_ms": 5000,
+        "max_retries": 1,
+        "retry_backoff_ms": 200,
+        "concurrency_limit": 0,
+        "tags": ["backup", "multimodal", "vl", "small"]
+      },
+      {
+        "name": "qwen3_vl_30b_a3b_instruct_chat",
+        "source": { "type": "local", "url": "http://222.71.155.58:22223", "key_ref": null },
+        "impl": "vllm",
+        "provider": "vllm",
+        "timeout_ms": 120000,
+        "connect_timeout_ms": 5000,
+        "max_retries": 1,
+        "retry_backoff_ms": 200,
+        "concurrency_limit": 0,
+        "tags": ["backup", "multimodal", "vl", "large"]
+      }
+    ],
+    "embedding": [
+      {
+        "name": "qwen3_embedding_8b",
+        "source": {
+          "type": "local",
+          "url": "http://10.19.155.42:8000",
+          "url_ref": "env:SIA_EMBEDDING_BASE_URL",
+          "key_ref": null
+        },
+        "impl": "vllm",
+        "provider": "vllm",
+        "timeout_ms": 60000,
+        "connect_timeout_ms": 5000,
+        "max_retries": 1,
+        "retry_backoff_ms": 200,
+        "concurrency_limit": 0,
+        "tags": ["default", "backup"]
+      }
+    ],
+    "visual": [
+      {
+        "name": "qwen3_vl_8b_instruct_fp8_visual",
+        "source": { "type": "local", "url": "http://10.19.155.42:8000", "key_ref": null },
+        "impl": "vllm",
+        "provider": "vllm",
+        "timeout_ms": 60000,
+        "connect_timeout_ms": 5000,
+        "max_retries": 1,
+        "retry_backoff_ms": 200,
+        "concurrency_limit": 0,
+        "tags": ["backup", "multimodal", "vl"]
+      },
+      {
+        "name": "qwen2_5_vl_7b_instruct_visual",
+        "source": { "type": "local", "url": "http://10.19.155.42:8001", "key_ref": null },
+        "impl": "vllm",
+        "provider": "vllm",
+        "timeout_ms": 60000,
+        "connect_timeout_ms": 5000,
+        "max_retries": 1,
+        "retry_backoff_ms": 200,
+        "concurrency_limit": 0,
+        "tags": ["backup", "multimodal", "vl"]
+      },
+      {
+        "name": "qwen3_vl_30b_a3b_instruct_visual",
+        "source": { "type": "local", "url": "http://222.71.155.58:22223", "key_ref": null },
+        "impl": "vllm",
+        "provider": "vllm",
+        "timeout_ms": 120000,
+        "connect_timeout_ms": 5000,
+        "max_retries": 1,
+        "retry_backoff_ms": 200,
+        "concurrency_limit": 0,
+        "tags": ["backup", "multimodal", "vl", "large"]
+      }
+    ]
+  }
+}

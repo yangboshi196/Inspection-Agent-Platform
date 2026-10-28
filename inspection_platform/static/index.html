@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>安全生产智能巡检系统</title>
+    <script type="module" crossorigin src="./assets/index-BXDkgb-z.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-BwXoXtkL.css">
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      (function () {
+        if (location.protocol !== "file:") return;
+        var root = document.getElementById("root");
+        root.innerHTML =
+          '<div style="max-width:520px;margin:48px auto;padding:28px 32px;font-family:system-ui,sans-serif;line-height:1.6;color:#0f172a;background:#fff;border:1px solid #e2e8f0;border-radius:12px;box-shadow:0 8px 30px rgba(15,23,42,.08)">' +
+          '<h1 style="margin:0 0 12px;font-size:20px">请通过本地服务器打开演示</h1>' +
+          '<p style="margin:0 0 16px;color:#64748b;font-size:14px">浏览器不允许 <code>file://</code> 协议加载 ES 模块，直接双击 <code>index.html</code> 会显示空白。</p>' +
+          '<p style="margin:0 0 8px;font-size:14px"><strong>正确方式：</strong></p>' +
+          '<ol style="margin:0 0 16px;padding-left:20px;color:#334155;font-size:14px">' +
+          '<li>双击运行 <code>demo/一键启动演示.bat</code></li>' +
+          '<li>或在 <code>demo</code> 目录执行 <code>powershell -File serve.ps1</code></li>' +
+          '<li>浏览器访问 <code>http://127.0.0.1:8080/</code></li>' +
+          '</ol>' +
+          '<p style="margin:0;color:#94a3b8;font-size:12px">构建命令：<code>cd webui && npm run build:demo</code></p>' +
+          '</div>';
+      })();
+    </script>
+  </body>
+</html>
